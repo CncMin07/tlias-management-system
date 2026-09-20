@@ -1,0 +1,44 @@
+# ============================================================
+# 学生部门管理系统 —— 配置参考模板
+# ============================================================
+# 注意：Spring Boot 不会加载本文件（它在 docs/ 下，不在 classpath 里）。
+# 真正生效的是 tlias-web-management/src/main/resources/application.yaml，
+# 其中所有敏感项都写成 ${ENV_VAR:默认值}，由环境变量注入。
+#
+# 本文件的作用是：告诉你每个配置项对应的环境变量叫什么、默认值是什么。
+# 直接照着下面的注释配环境变量即可，不需要改 application.yaml。
+
+spring:
+  datasource:
+    # DB_HOST / DB_PORT / DB_NAME，默认 localhost / 3306 / tlias
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:tlias}
+    # DB_USERNAME，默认 root
+    username: ${DB_USERNAME:root}
+    # DB_PASSWORD，默认空
+    password: ${DB_PASSWORD:}
+
+aliyun:
+  OSS:
+    # OSS_ENDPOINT，默认上海节点
+    endPoint: ${OSS_ENDPOINT:https://oss-cn-shanghai.aliyuncs.com}
+    # OSS_BUCKET_NAME，默认空（不配就没法上传文件）
+    bucketName: ${OSS_BUCKET_NAME:}
+    # OSS_REGION，默认 cn-shanghai
+    region: ${OSS_REGION:cn-shanghai}
+    # 另有两个变量名固定不可改，由代码中 AliyunOSSOperator 直接读取：
+    #   OSS_ACCESS_KEY_ID
+    #   OSS_ACCESS_KEY_SECRET
+
+# ============================================================
+# Windows (cmd) 一次性写入用户级环境变量 —— 新开的终端 / IDE 才生效：
+#   setx DB_PASSWORD "你的MySQL密码"
+#   setx OSS_ACCESS_KEY_ID "你的AccessKeyId"
+#   setx OSS_ACCESS_KEY_SECRET "你的AccessKeySecret"
+#   setx OSS_BUCKET_NAME "你的Bucket名称"
+#
+# 只对当前终端会话生效（不改系统环境变量）：
+#   set DB_PASSWORD=你的MySQL密码
+#
+# IDEA 里更省事的做法：
+#   Run/Debug Configurations → Environment variables 里逐条填进去
+# ============================================================

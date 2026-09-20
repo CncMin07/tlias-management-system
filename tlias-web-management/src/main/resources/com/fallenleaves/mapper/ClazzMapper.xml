@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fallenleaves.mapper.ClazzMapper">
+
+
+    <insert id="insertClazz">
+        INSERT INTO clazz (
+            name,
+            room,
+            begin_date,
+            end_date,
+            master_id,
+            subject,
+            create_time,
+            update_time
+        ) VALUES (
+                     #{name},
+                     #{room},
+                     #{beginDate},
+                     #{endDate},
+                     #{masterId},
+                     #{subject},
+                     NOW(),
+                     NOW()
+                 );
+    </insert>
+
+    <update id="updateClazz">
+        UPDATE Clazz
+        <set>
+            <if test="name != null and name != '' ">
+                name = #{name},
+            </if>
+            <if test="room != null and room != ''">
+                room = #{room},
+            </if>
+            <if test="beginDate != null">
+                begin_date = #{beginDate},
+            </if>
+            <if test="endDate != null">
+                end_date = #{endDate},
+            </if>
+            <if test="masterId != null">
+                master_id = #{masterId},
+            </if>
+            <if test="subject != null">
+                subject = #{subject},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <resultMap id="clazzResultMap" type="com.fallenleaves.pojo.Clazz">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="room" property="room"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="master_id" property="masterId"/>
+        <result column="subject" property="subject"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+
+    <delete id="deleteById">
+        delete from clazz where id=#{id}
+    </delete>
+
+
+    <select id="list" resultType="com.fallenleaves.pojo.Clazz">
+        select c.* ,e.name mastername  from clazz c left join emp e on c.master_id=e.id
+        <where>
+            <if test="name !=null and name != '' ">
+                c.name like concat('%',#{name},'%')
+            </if>
+
+            <if test="begin != null and end !=null">
+                and c.end_date between #{begin} and #{end}
+            </if>
+        </where>
+
+
+        order by e.update_time desc
+    </select>
+    <select id="getClazzById" resultType="com.fallenleaves.pojo.Clazz">
+        select c.* ,e.name from clazz c left join emp e on c.master_id=e.id
+        where c.id=#{id}
+    </select>
+</mapper>
